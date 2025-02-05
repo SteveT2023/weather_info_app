@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +30,7 @@ class WeatherPage extends StatefulWidget {
 
 class _WeatherPageState extends State<WeatherPage> {
   final TextEditingController _controller = TextEditingController();
+  final Random _random = Random();
 
   String _city = '';
   String _temperature = '';
@@ -36,11 +38,9 @@ class _WeatherPageState extends State<WeatherPage> {
 
   void _fetchWeather() {
     setState(() {
-      // This is where you'd call your weather API and update the data.
-      // For now, we're simulating some data for demonstration.
       _city = _controller.text;
-      _temperature = '27°C'; // Example temperature
-      _weatherCondition = 'Sunny'; // Example weather condition
+      _temperature = '${_random.nextInt(16) + 15}°C';
+      _weatherCondition = ['Sunny', 'Cloudy', 'Rainy'][_random.nextInt(3)];
     });
   }
 
@@ -55,7 +55,6 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TextField for city input
             TextField(
               controller: _controller,
               decoration: const InputDecoration(
@@ -64,13 +63,11 @@ class _WeatherPageState extends State<WeatherPage> {
               ),
             ),
             const SizedBox(height: 20),
-            // Button to fetch weather
             ElevatedButton(
               onPressed: _fetchWeather,
               child: const Text('Fetch Weather'),
             ),
             const SizedBox(height: 20),
-            // Display weather information (Placeholders)
             Text(
               'City: $_city',
               style: const TextStyle(fontSize: 18),
