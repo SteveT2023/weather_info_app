@@ -55,6 +55,7 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // TextField for user to enter city name
             TextField(
               controller: _controller,
               decoration: const InputDecoration(
@@ -63,11 +64,13 @@ class _WeatherPageState extends State<WeatherPage> {
               ),
             ),
             const SizedBox(height: 20),
+            // Button to fetch weather data
             ElevatedButton(
               onPressed: _fetchWeather,
               child: const Text('Fetch Weather'),
             ),
             const SizedBox(height: 20),
+            // Display simulated weather information
             Text(
               'City: $_city',
               style: const TextStyle(fontSize: 18),
