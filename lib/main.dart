@@ -7,7 +7,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-// This is final.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,12 +35,25 @@ class _WeatherPageState extends State<WeatherPage> {
   String _city = '';
   String _temperature = '';
   String _weatherCondition = '';
+  List<Map<String, String>> _weeklyForecast = [];
 
   void _fetchWeather() {
     setState(() {
       _city = _controller.text;
       _temperature = '${_random.nextInt(16) + 15}°C';
       _weatherCondition = ['Sunny', 'Cloudy', 'Rainy'][_random.nextInt(3)];
+    });
+  }
+
+  void _fetchWeeklyForecast() {
+    setState(() {
+      _weeklyForecast = List.generate(7, (index) {
+        return {
+          'day': 'Day ${index + 1}',
+          'temperature': '${_random.nextInt(16) + 15}°C',
+          'condition': ['Sunny', 'Cloudy', 'Rainy'][_random.nextInt(3)],
+        };
+      });
     });
   }
 
@@ -55,7 +68,6 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TextField for user to enter city name
             TextField(
               controller: _controller,
               decoration: const InputDecoration(
@@ -64,13 +76,11 @@ class _WeatherPageState extends State<WeatherPage> {
               ),
             ),
             const SizedBox(height: 20),
-            // Button to fetch weather data
             ElevatedButton(
               onPressed: _fetchWeather,
               child: const Text('Fetch Weather'),
             ),
             const SizedBox(height: 20),
-            // Display simulated weather information
             Text(
               'City: $_city',
               style: const TextStyle(fontSize: 18),
@@ -83,6 +93,24 @@ class _WeatherPageState extends State<WeatherPage> {
               'Condition: $_weatherCondition',
               style: const TextStyle(fontSize: 18),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _fetchWeeklyForecast,
+              child: const Text('Get 7-Day Forecast'),
+            ),
+            const SizedBox(height: 20),
+            if (_weeklyForecast.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _weeklyForecast.map((day) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(day['day']!),
+                      subtitle: Text('${day['temperature']} - ${day['condition']}'),
+                    ),
+                  );
+                }).toList(),
+              ),
           ],
         ),
       ),
